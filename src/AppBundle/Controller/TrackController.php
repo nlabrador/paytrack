@@ -50,8 +50,7 @@ class TrackController extends Controller
                     $date = preg_replace("/-\d\d$/", '', $date);
 
                     $jsonPath = sprintf(
-                        "%s/tracks/%s/%s.json",
-                        $this->getParameter('data'),
+                        "data/tracks/%s/%s.json",
                         $this->get('session')->get('credentialId'),
                         $date
                     );
@@ -176,8 +175,7 @@ class TrackController extends Controller
     public function setdateAction($date, Request $request)
     {
         $jsonPath = sprintf(
-            "%s/tracks/%s/%s.json",
-            $this->getParameter('data'),
+            "data/tracks/%s/%s.json",
             $this->get('session')->get('credentialId'),
             $date
         );

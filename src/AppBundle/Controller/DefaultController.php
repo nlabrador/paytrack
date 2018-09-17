@@ -121,24 +121,19 @@ class DefaultController extends Controller
     {
         if ($request->isMethod('POST')) {
             $credentialFile = sprintf("%s/credential.json", $this->getParameter('data'));
-            $credential = new Credential($credentialFile); 
+            $credential = new Credential(); 
 
             if ($credential->validate($request->request->get('emailAddress'), $credential->generatePassKey($request->request->get('password')))) {
                 $this->get('session')->set('credentialId', md5($request->request->get('emailAddress')));
 
                 $now = new \DateTime('NOW');
                 $jsonPath = sprintf(
-                    "%s/tracks/%s/%s.json",
-                    $this->getParameter('data'),
+                    "data/tracks/%s/%s.json",
                     $this->get('session')->get('credentialId'),
                     $now->format('Y-m')
                 );
                 
-                $dataDir   = $this->getParameter('data');
-                $typesFile = sprintf("%s/types.json", $dataDir);
-
                 $this->get('session')->set('tracksJsonPath', $jsonPath);
-                $this->get('session')->set('typesJsonPath', $typesFile);
 
                 return $this->redirectToRoute("homepage");
             }
@@ -157,6 +152,7 @@ class DefaultController extends Controller
     public function logoutAction(Request $request)
     {
         $this->get('session')->set('credentialId', null);
+        $this->get('session')->set('tracksJsonPath', null);
 
         return $this->redirectToRoute("login");
     }

@@ -10,4 +10,3 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: 3af48277f46cb0e6dc16b4fa0f43c3920fe13175
-    data: '%kernel.root_dir%/../data'

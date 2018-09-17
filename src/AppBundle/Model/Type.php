@@ -3,18 +3,20 @@
 namespace AppBundle\Model;
 
 class Type {
-    private $typesJsonPath;
+    private $storage;
 
-    public function __construct($typesJsonPath)
+    public function __construct()
     {
-        $this->typesJsonPath = $typesJsonPath;
+        $this->storage = new GoogleStorage();
+        $this->storage->setObjectName('data/types.json');
     }
 
     public function getTypes()
     {
         $data = [];
-        if (file_exists($this->typesJsonPath)) {
-            $data = json_decode(file_get_contents($this->typesJsonPath));
+        $contents = $this->storage->getContents();
+        if ($contents) {
+            $data = json_decode($contents);
         }
 
         return $data;

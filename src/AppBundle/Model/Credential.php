@@ -3,15 +3,12 @@
 namespace AppBundle\Model;
 
 class Credential {
-    private $credentialFile;
+    private $storage;
 
-    /**
-     * Construct
-     * @param $credentialFile - Full path of crendentials file
-     */
-    public function __construct($credentialFile)
+    public function __construct()
     {
-        $this->credentialFile = $credentialFile;
+        $this->storage = new GoogleStorage();
+        $this->storage->setObjectName('data/credential.json');
     }
 
     /**
@@ -20,7 +17,7 @@ class Credential {
      */
     public function find($emailAddress)
     {
-        $content = file_get_contents($this->credentialFile);
+        $content = $this->storage->getContents(); 
 
         if ($content) {
             $credentials = json_decode($content, true);
@@ -56,14 +53,14 @@ class Credential {
 
     public function create($emailAddress, $password)
     {
-        $content = file_get_contents($this->credentialFile);
+        $content = $this->storage->getContents(); 
 
         if ($content) {
             $credentials = json_decode($content, true);
 
             $credentials[$emailAddress] = $this->generatePassKey($password);
-            
-            file_put_contents($this->credentialFile, json_encode($credentials));
+
+            $this->storage->saveJsonObject($credentials);
 
             return true;
         }

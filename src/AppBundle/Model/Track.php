@@ -2,21 +2,24 @@
 
 namespace AppBundle\Model;
 
-use Symfony\Component\Finder\Finder;
-
 class Track {
+    private $storage;
     private $tracksJsonPath;
 
     public function __construct($tracksJsonPath)
     {
+        $this->storage = new GoogleStorage();
+        $this->storage->setObjectName($tracksJsonPath);
         $this->tracksJsonPath = $tracksJsonPath;
     }
 
     public function getTracks()
     {
         $data = [];
-        if (file_exists($this->tracksJsonPath)) {
-            $data = json_decode(file_get_contents($this->tracksJsonPath));
+        
+        $contents = $this->storage->getContents();
+        if ($contents) {
+            $data = json_decode($contents);
         }
 
         return $data;
@@ -24,22 +27,22 @@ class Track {
 
     public function saveTrack($data)
     {
-        file_put_contents($this->tracksJsonPath, json_encode($data));
+        $this->storage->saveJsonObject($data);
     }
 
     public function getAllTracks()
     {
         $tracksDir = preg_replace("/\/\d{4}-.*$/", "", $this->tracksJsonPath);
+        $tracksDir = preg_replace("/^.*tracks\//", "", $tracksDir);
+
         $tracks = [];
+        foreach ($this->storage->getObjects() as $object) {
+            if (preg_match("/$tracksDir/", $object->name())) {
+                $data = json_decode($object->downloadAsString());
 
-        $finder = new Finder();
-        $finder->files()->in($tracksDir);
-
-        foreach ($finder as $file) {
-            $data = json_decode($file->getContents());
-
-            foreach ($data as $item) {
-                $tracks[] = $item;
+                foreach ($data as $item) {
+                    $tracks[] = $item;
+                }
             }
         }
 
