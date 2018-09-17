@@ -62,10 +62,7 @@ class DefaultController extends Controller
             $valid    = $validate->validateSignup();
 
             if (isset($valid['success'])) {
-                $tracksDir = sprintf("%s/tracks/%s", $this->getParameter('data'), md5($request->request->get('email')));
-
-                $credentialFile = sprintf("%s/credential.json", $this->getParameter('data'));
-                $credential = new Credential($credentialFile); 
+                $credential = new Credential(); 
 
                 if ($credential->find($request->request->get('email'))) {
                     $this->addFlash(
@@ -77,8 +74,6 @@ class DefaultController extends Controller
                 }
                 else {
                     if ($credential->create($request->request->get('email'), $request->request->get('password'))) {
-                        mkdir($tracksDir);
-
                         return $this->redirectToRoute("login");
                     }
                     else {
@@ -120,7 +115,6 @@ class DefaultController extends Controller
     public function loginAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $credentialFile = sprintf("%s/credential.json", $this->getParameter('data'));
             $credential = new Credential(); 
 
             if ($credential->validate($request->request->get('emailAddress'), $credential->generatePassKey($request->request->get('password')))) {
