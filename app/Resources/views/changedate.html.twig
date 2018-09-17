@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container col-md-7 min-height">
+        <div class="padding-top-20" style="text-align:center;">
+            <h5>Choose Year/Month</h5>
+            <h4>
+                <a href="{{ path('changedate', {sub:sub+1}) }}"><span class="oi oi-chevron-left"></span></a>&nbsp;&nbsp;
+                <strong>{{ year }}</strong>
+
+                {% if year < current %}
+                    &nbsp;&nbsp;<a href="{{ path('changedate', {sub:sub-1}) }}"><span class="oi oi-chevron-right"></span></a>
+                {% endif %}
+            </h4>
+            <table class="table table-bordered months">
+                <tr>
+                    <td><a href="{{ path('setdate', {date:year ~ '-01'}) }}">Jan</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-02'}) }}">Feb</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-03'}) }}">Mar</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ path('setdate', {date:year ~ '-04'}) }}">Apr</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-05'}) }}">May</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-06'}) }}">Jun</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ path('setdate', {date:year ~ '-07'}) }}">Jul</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-08'}) }}">Aug</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-09'}) }}">Sep</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ path('setdate', {date:year ~ '-10'}) }}">Oct</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-11'}) }}">Nov</a></td>
+                    <td><a href="{{ path('setdate', {date:year ~ '-12'}) }}">Dec</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

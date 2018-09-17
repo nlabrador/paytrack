@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+      <div class="container col-md-7 min-height">
+        <div class="padding-top-20">
+        <h4 class="pull-right">Edit Payment</h4>
+        {% for message in app.flashes('error') %}
+            <br>
+            <br>
+            <div class="alert alert-danger" role="alert">
+                {{ message|raw }}
+            </div>
+        {% endfor %}
+        <div class="form">
+          <form action="" method="post" role="form" class="contactForm">
+              <div class="form-group col-md-12">
+                <select name="type" class="form-control">
+                    <option value="">-- Payment Type --</option>
+                    {% for type in types %}
+                        {% if type == track.type %}
+                            {% set selected = 'selected="selected"' %}
+                        {% else %}
+                            {% set selected = '' %}
+                        {% endif %}
+
+                        <option value="{{ type }}" {{ selected }}>{{ type }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <input type="text" id="title" name="title" class="form-control" value="{{ track.title }}" placeholder="Info (Ex. For August 2018)"/>
+              </div>
+              <div class="form-group col-md-12">
+                <input type="text" class="form-control" name="date"  placeholder="Date Paid (yyyy-mm-dd)" value="{{ track.date }}"/>
+              </div>
+              <div class="form-group col-md-12">
+                <input type="text" class="form-control" name="amount"  placeholder="Amount Paid" value="{{ track.amount }}" />
+              </div>
+              <div class="form-group col-md-12">
+                <button class="btn btn-md btn-primary col-md-12" type="submit">Confirm</button>
+              </div>
+              <div class="form-group col-md-12">
+                <a href="/track" class="btn btn-md btn-secondary col-md-12">Cancel</a>
+              </div>
+          </form>
+        </div>
+        </div>
+      </div>
+{% endblock %}

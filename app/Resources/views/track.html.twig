@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container col-md-7 min-height">
+        <div class="padding-top-20">
+        <div class="pull-right">
+            <h5>
+                <a href="{{ path("changedate", {sub:0}) }}" id="datepicker"><span class="oi oi-calendar"></span></a>
+                <a href="/create"><span class="oi oi-plus"></span></a>
+                &nbsp;&nbsp;Tracked Payments
+                <br>
+                <span class="pull-right"><small><strong>{{ date|date("M. Y") }}</strong></small></span>
+            </h5>
+        </div>
+        {% if tracks %}
+        <table class="table">
+            {% set count = 0 %}
+            {% set total = 0 %}
+            {% for track in tracks %}
+            <tr>
+                <td>
+                    {% set total = total + track.amount %}
+                    <strong>{{ track.type }}</strong> <h5 class="pull-right"><span class="badge badge-pill badge-info">{{ track.amount|number_format }}</span></h5>
+                    <br>
+                    {% if track.title %}
+                        <small>{{ track.title }}</small>
+                        <br>
+                    {% endif %}
+                    <small><strong>Paid:</strong> {{ track.date|date("M j, Y") }}</small>
+                </td>
+                <td>
+                    <a title="Edit" class="btn btn-sm btn-primary" href="{{ path('edit', {index:count}) }}"><span class="oi oi-pencil"></span></a>
+                    <a title="Delete" class="btn btn-sm btn-danger" href="{{ path('delete', {index:count}) }}"><span class="oi oi-minus"></span></a>
+
+                </td>
+            </tr>
+                {% set count = count + 1 %}
+            {% endfor %}
+            <tr>
+                <td>
+                    <strong>Total Payments</strong><br>
+                    <h4><span class="badge badge-pill badge-success">{{  total|number_format }}</span></h4>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        {% else %}
+            <br>
+            <br>
+            <br>
+            <div class="alert alert-secondary">
+                No payments found for {{ date|date("M Y") }}.
+                <a href="{{ path("changedate", {sub:0}) }}">Change Date</a>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

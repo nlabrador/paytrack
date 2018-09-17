@@ -1,2 +1,4 @@
-# paytrack
-Simple Payment Tracking
+paytrack
+=========
+
+A simple payment tracking

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container col-md-7 min-height">
+        <div class="padding-top-20">
+        {% if types %}
+        <div class="pull-right">
+            <h5>
+                <a href="/track"><span class="oi oi-list"></span></a>
+                &nbsp;&nbsp;Average Payments
+            </h5>
+        </div>
+        <table class="table">
+            {% for type, data in types %}
+            <tr>
+                <td>
+                    <strong>{{ type }}</strong>
+                </td>
+                <td>
+                    <h5><span class="badge badge-pill badge-info">{{ data.average|number_format }}</span></h5>
+                </td>
+                <td>
+                    <span class="oi oi-graph"></span>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <h5>Start tracking your <span>payments</span><br>now!</h5>
+            <a href="/track" class="btn-get-started scrollto">Track</a>
+            <a href="/create" class="btn-projects scrollto">Create</a>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}
