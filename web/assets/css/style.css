@@ -250,7 +250,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-get-started:hover {
   background: none;
-  color:  #0069d9 ;
+  color:  #0069d9 !important ;
 }
 
 .btn-projects {
@@ -270,7 +270,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-projects:hover {
   background: none;
-  color:     #fb5487   ;
+  color:     #fb5487   !important;
 }
 
 #intro #intro-carousel {

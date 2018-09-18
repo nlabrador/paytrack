@@ -5,10 +5,10 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 use AppBundle\Model\Track;
 use AppBundle\Model\Credential;
+use AppBundle\Model\Session;
 use AppBundle\Model\FormValidate;
 
 class DefaultController extends Controller
@@ -18,8 +18,10 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if ($this->get('session')->get('credentialId')) {
-            $obj    = new Track($this->get('session')->get('tracksJsonPath'));
+        $session = new Session($request->headers->get('Cookie'));
+
+        if ($session->get('credentialId')) {
+            $obj    = new Track($session->get('tracksJsonPath'));
             $tracks = $obj->getAllTracks();
             $types  = [];
 
@@ -118,16 +120,18 @@ class DefaultController extends Controller
             $credential = new Credential(); 
 
             if ($credential->validate($request->request->get('emailAddress'), $credential->generatePassKey($request->request->get('password')))) {
-                $this->get('session')->set('credentialId', md5($request->request->get('emailAddress')));
+                $session = new Session($request->headers->get('Cookie'));
+
+                $session->set('credentialId', md5($request->request->get('emailAddress')));
 
                 $now = new \DateTime('NOW');
                 $jsonPath = sprintf(
                     "data/tracks/%s/%s.json",
-                    $this->get('session')->get('credentialId'),
+                    $session->get('credentialId'),
                     $now->format('Y-m')
                 );
                 
-                $this->get('session')->set('tracksJsonPath', $jsonPath);
+                $session->set('tracksJsonPath', $jsonPath);
 
                 return $this->redirectToRoute("homepage");
             }
@@ -145,8 +149,10 @@ class DefaultController extends Controller
      */
     public function logoutAction(Request $request)
     {
-        $this->get('session')->set('credentialId', null);
-        $this->get('session')->set('tracksJsonPath', null);
+        $session = new Session($request->headers->get('Cookie'));
+
+        $session->set('credentialId', null);
+        $session->set('tracksJsonPath', null);
 
         return $this->redirectToRoute("login");
     }
